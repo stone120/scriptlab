@@ -1,0 +1,5 @@
+TIMESTAMP_1 (?:(%{YEAR}-%{MONTHNUM}-%{MONTHDAY}){0,1}[T ]%{HOUR}:?%{MINUTE}(?::?%{SECOND}))
+TIMESTAMP_2 %{TIMESTAMP_1} %{TZ}
+JAVASTACKTRACEPART_1 %{JAVAFILE:java_file}:%{WORD:java_method}:%{NUMBER:java_line}
+MAPPERFILE (?:[A-Za-z0-9]+)
+SQLMAPPER %{MAPPERFILE}.%{WORD:mapper_function}
