@@ -1,3 +1,5 @@
+# usage: /opt/IBM/WebSphere/AppServer/bin/wsadmin.sh -lang jython -f ./core.py -user wasadmin -password wasadmin [1] yourServerName
+# Author: shibh
 def gen_javacore(servername):
         objParms='type=JVM,process=' + servername + ',*'
         objNameString = AdminControl.completeObjectName(objParms)
