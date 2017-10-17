@@ -10,8 +10,8 @@ import fileinput
 
 _choice_course_file='course.txt'  # 选课功能，课程列表
 _cookie_file='cookie1.txt'  # 可以不存在
-_user_name='shibaohua'
-_passwd='zxcv1234'
+_user_name='username'
+_passwd='password'
 #_learn_by_time=False   # 是否学满 _time 分钟
 _learn_by_time=True     # 是否学满 _time 分钟
 _time=60
@@ -27,21 +27,21 @@ def print_cookie(cookie):
         print('Value =' + item.value)
 
 def logout(opener):
-    logout_url = 'http://learningcourse.citicbank.com:81/ksproduct/core/user/otherlogonout.action '
+    logout_url = 'http://learningcourse.domainname.com:81/ksproduct/core/user/otherlogonout.action '
     opener.open(logout_url)
     
 def examlogout(opener):
-    url = 'http://learning.citicbank.com/exam/app/exam/login/logout.jsp'
+    url = 'http://learning.domainname.com/exam/app/exam/login/logout.jsp'
     opener.open(url)
 
 def login(opener):
-    login_url = 'http://learning.citicbank.com/jsp/ldaplogining.jsp'
+    login_url = 'http://learning.domainname.com/jsp/ldaplogining.jsp'
     login_data = { 'name': _user_name, 'pwd' : _passwd }
     data = urllib.urlencode(login_data)
     opener.open(login_url, data)
 
 def search_lesson(opener, le_name):
-    url = ' http://learning.citicbank.com/cmd/StudentNewControl?flag=selectedLessonList&param1=' + le_name
+    url = ' http://learning.domainname.com/cmd/StudentNewControl?flag=selectedLessonList&param1=' + le_name
     response = opener.open(url)
     html = response.read()
     us_id = get_us_id(html)
@@ -57,13 +57,13 @@ def get_us_id(html):
         return  res[0]
 
 def choice_course(opener,us_id, le_id):
-    url = 'http://learning.citicbank.com/cmd/ChoiceCourseControl '
+    url = 'http://learning.domainname.com/cmd/ChoiceCourseControl '
     post_data = { 'flag': 'insertSelectedLesson', 'us_id' : us_id, 'lessonInfo' : le_id + '*0.0', 'le_id' : le_id}
     data = urllib.urlencode(post_data)
     opener.open(url, data)
 
 def get_lesson(opener):
-    get_lesson_url = 'http://learning.citicbank.com/cmd/StudentNewControl?flag=selectedLessonStudy&topMenu=02&leftMenu=01'
+    get_lesson_url = 'http://learning.domainname.com/cmd/StudentNewControl?flag=selectedLessonStudy&topMenu=02&leftMenu=01'
     get_lesson_data = { 'topMenu' : '02', 'leftMenu' : '01', 'content' : '' }
     data = urllib.urlencode(get_lesson_data)
     response = opener.open(get_lesson_url, data)
@@ -105,7 +105,7 @@ def get_all_lesson_info(opener,html,page):
     if len(last_page) > 0:
         return all_lesson_info
     else:
-        url = 'http://learning.citicbank.com/cmd/StudentNewControl?flag=selectedLessonStudy&content=&topMenu=02&leftMenu=01&currentPage=' +str(page+1)
+        url = 'http://learning.domainname.com/cmd/StudentNewControl?flag=selectedLessonStudy&content=&topMenu=02&leftMenu=01&currentPage=' +str(page+1)
         response = opener.open(url)
         html = response.read()
         return  all_lesson_info + get_all_lesson_info(opener, html, page+1)
@@ -121,12 +121,12 @@ def get_SCOID(html):
 
 
 def learn_lesson(opener, le_id):
-    learn_url = "http://learning.citicbank.com/cmd/LessonStudyControl?flag=study&tl_id=&le_id=" + le_id +"&isStation=0&tc_id=1&type=4&isEnty=1&isSelected=1"
-    #learn_url = "http://learningcourse.citicbank.com:81/jsp/scorm/classroom/Classroom.jsp?intFrameFlip=180&tl_id=0&le_id=" + le_id + "&us_id=186831&sessionUTDID=5996569&sessionStudyTime=" + str(long(time.time()) - 3600)
+    learn_url = "http://learning.domainname.com/cmd/LessonStudyControl?flag=study&tl_id=&le_id=" + le_id +"&isStation=0&tc_id=1&type=4&isEnty=1&isSelected=1"
+    #learn_url = "http://learningcourse.domainname.com:81/jsp/scorm/classroom/Classroom.jsp?intFrameFlip=180&tl_id=0&le_id=" + le_id + "&us_id=186831&sessionUTDID=5996569&sessionStudyTime=" + str(long(time.time()) - 3600)
     response = opener.open(learn_url)
 
     # 2. refresh course
-    learn_url_2 = 'http://learning.citicbank.com/cmd/LessonStudyControl?flag=refreshCourseware'
+    learn_url_2 = 'http://learning.domainname.com/cmd/LessonStudyControl?flag=refreshCourseware'
     refer_url = response.geturl()
 
     # refer_url_1 : sessionStudyTime changed
@@ -166,13 +166,13 @@ def get_us_id_from_url(url):
 
 
 def learn_lesson(opener, le_id, tl_id, le_type, tc_id, is_station, str_type, le_time):
-    learn_url = "http://learning.citicbank.com/cmd/LessonStudyControl?flag=study&tl_id=" + tl_id  + "&le_id=" + le_id +"&isStation=" + is_station + "&tc_id="+ tc_id + "&type="+ le_type + "&isEnty=1&isSelected=1"
+    learn_url = "http://learning.domainname.com/cmd/LessonStudyControl?flag=study&tl_id=" + tl_id  + "&le_id=" + le_id +"&isStation=" + is_station + "&tc_id="+ tc_id + "&type="+ le_type + "&isEnty=1&isSelected=1"
     if str_type != "":
         learn_url = learn_url + "&strType="+str_type
     response = opener.open(learn_url)
 
     # 2. refresh course
-    learn_url_2 = 'http://learning.citicbank.com/cmd/LessonStudyControl?flag=refreshCourseware'
+    learn_url_2 = 'http://learning.domainname.com/cmd/LessonStudyControl?flag=refreshCourseware'
     refer_url = response.geturl()
 
 
@@ -216,23 +216,23 @@ def learn_lesson(opener, le_id, tl_id, le_type, tc_id, is_station, str_type, le_
     if le_type == "2":
         return ("", us_id)
     # 3. 
-    learn_url_3 = 'http://learningcourse.citicbank.com:81/jsp/scorm/classroom/ScormAPI.jsp?tl_id=0&le_id=' + le_id + '&us_id=' + us_id + '&distrURL=null'
+    learn_url_3 = 'http://learningcourse.domainname.com:81/jsp/scorm/classroom/ScormAPI.jsp?tl_id=0&le_id=' + le_id + '&us_id=' + us_id + '&distrURL=null'
     opener.open(learn_url_3)
 
     # 4. get scoid
-    learn_url_4 = 'http://learningcourse.citicbank.com:81/jsp/scorm/classroom/CurrentChapter.jsp?tl_id=' + le_id +'&le_id=' + le_id +'&us_id=' + us_id 
+    learn_url_4 = 'http://learningcourse.domainname.com:81/jsp/scorm/classroom/CurrentChapter.jsp?tl_id=' + le_id +'&le_id=' + le_id +'&us_id=' + us_id 
     response4 = opener.open(learn_url_4)
     return (get_SCOID(response4.read()),us_id)
 
 def set_lesson_complete(opener, le_id, scoid, us_id):
-    post_url = 'http://learningcourse.citicbank.com:81/jsp/scorm/classroom/ScormLMSPut.jsp'
+    post_url = 'http://learningcourse.domainname.com:81/jsp/scorm/classroom/ScormLMSPut.jsp'
     post_data = 'us_id=' + us_id + '&le_id=' +  le_id+ '&scoID=' + scoid + '&dataXML=<?xml version="1.0" encoding="GB2312" ?><root><CMICore><student_id>' + us_id + '</student_id><student_name>peaktele</student_name><lesson_location></lesson_location><credit>credit</credit><lesson_status>completed</lesson_status><entry>ab-initio</entry><CMIScore><raw>0</raw><min>60</min><max>100</max></CMIScore><total_time>0000:50:00.00</total_time><lesson_mode>normal</lesson_mode><exit></exit><session_time>00:00:00.0</session_time><lesson_progress></lesson_progress></CMICore><suspend_data></suspend_data><launch_data></launch_data><comments></comments></root>'
-    refer_url = 'http://learningcourse.citicbank.com:81/jsp/scorm/classroom/ScormAPI.jsp?tl_id=0&le_id=' + le_id + '&us_id=' + us_id + '&distrURL=null'
+    refer_url = 'http://learningcourse.domainname.com:81/jsp/scorm/classroom/ScormAPI.jsp?tl_id=0&le_id=' + le_id + '&us_id=' + us_id + '&distrURL=null'
     opener.addheaders = [('Accept','*/*'),('User-Agent',user_agent),('Accept-Language','zh-CN'),('Accept-Encoding','gzip, deflate'),('Content-Type','application/x-www-form-urlencoded'),('Referer',refer_url),('Connection','Keep-Alive'),('Pragma','no-cache')]
     response = opener.open(post_url, post_data)
 
 def exit_learn_lesson(opener, le_id, us_id):
-    exit_lesson_url = 'http://learning.citicbank.com/jsp/common/lessonstudy/ExitClassroom.jsp?us_id=' + us_id + '&le_id=' + le_id
+    exit_lesson_url = 'http://learning.domainname.com/jsp/common/lessonstudy/ExitClassroom.jsp?us_id=' + us_id + '&le_id=' + le_id
     response = opener.open(exit_lesson_url)
 
 def run():
